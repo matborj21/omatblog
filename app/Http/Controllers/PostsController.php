@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Post;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::all();
+
+        return view('posts.index', compact('posts', $posts));
     }
 
     /**
@@ -24,7 +26,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -33,9 +35,13 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+
+              Post::create($this->validateRequest());
+
+        
+       return redirect('/posts');
     }
 
     /**
@@ -82,4 +88,15 @@ class PostController extends Controller
     {
         //
     }
+
+    private function validateRequest() {
+        return request()->validate([
+            'title' => 'required',
+            'slug' => 'required',
+            'body' => 'required'
+        ]);
+       
+    }
 }
+
+
